@@ -1,6 +1,6 @@
 package com.example.blog.domain.user.controller;
 
-import com.example.blog.domain.user.service.StorageService;
+import com.example.blog.domain.user.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/file")
-public class StorageController {
+@RequestMapping("/api/file")
+public class S3Controller {
 
     @Autowired
-    private StorageService service;
+    private S3Service service;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {

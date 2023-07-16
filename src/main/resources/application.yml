@@ -1,8 +1,8 @@
 cloud:
   aws:
     credentials:
-      access-key: 엑세스키
-      secret-key: 시크릿키
+      access-key: AKIAYMZJG32FIQNPWGBJ
+      secret-key: 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
     region:
       static: ap-northeast-2
     stack:
@@ -10,7 +10,7 @@ cloud:
 
 application:
   bucket:
-    name: 버킷이름
+    name: kh-myawsbucket
 
 spring:
   servlet:

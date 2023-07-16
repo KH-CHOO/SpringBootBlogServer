@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
-                        .requestMatchers("/file/**").permitAll()
+                        .requestMatchers("/api/file/**").permitAll()
                         .anyRequest().authenticated()
         );
 

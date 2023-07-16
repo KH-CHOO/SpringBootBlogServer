@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @Service
 @Slf4j
-public class StorageService {
+public class S3Service {
 
     @Value("${application.bucket.name}")
     private String bucketName;
@@ -30,7 +30,10 @@ public class StorageService {
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
         fileObj.delete();
-        return "File uploaded : " + fileName;
+
+        String fileUrl = "https://" + "kh-myawsbucket" + ".s3." + "ap-northeast-2" + ".amazonaws.com/" + fileName;
+
+        return fileUrl;
     }
 
 
