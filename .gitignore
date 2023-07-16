@@ -41,3 +41,4 @@ out/
 .vscode/
 /src/main/resources/application.properties
 /src/main/resources/application.yml
+/feat_imageUpload.patch
