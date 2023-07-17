@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StatusAndMessageDTO {
 
-    private int statusCode;
+    private int status;
     private String message;
 
 }

@@ -3,6 +3,7 @@ package com.example.blog.domain.comment.controller;
 import com.example.blog.domain.comment.dto.CommentRequestDTO;
 import com.example.blog.domain.comment.dto.CommentResponseDTO;
 import com.example.blog.domain.comment.service.CommentService;
+import com.example.blog.global.dto.StatusAndMessageDTO;
 import com.example.blog.global.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,9 +47,11 @@ public class CommentController {
     @Operation(summary = "댓글 삭제")
     // 댓글 삭제
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Map<String, String>> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                             @PathVariable("commentId") Long commentId) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteComment(commentId, userDetails.getUsername()));
+    public ResponseEntity<StatusAndMessageDTO> deleteComment(@PathVariable("commentId") Long commentId,
+                                                             @AuthenticationPrincipal UserDetailsImpl userDetails
+                                                             ) {
+        StatusAndMessageDTO response = commentService.deleteComment(commentId,userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
