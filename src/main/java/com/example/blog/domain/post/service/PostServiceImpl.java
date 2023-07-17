@@ -11,6 +11,7 @@ import com.example.blog.domain.user.entity.UserRoleEnum;
 import com.example.blog.domain.user.exception.UserNotFoundException;
 import com.example.blog.domain.user.entity.User;
 import com.example.blog.domain.user.repository.UserRepository;
+import com.example.blog.global.dto.StatusAndMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -131,7 +132,7 @@ public class PostServiceImpl implements PostService {
     // 게시글 삭제
     @Transactional
     @Override
-    public Map<String, String> deletePost(Long postId, String username) {
+    public StatusAndMessageDTO deletePost(Long postId, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("Not Found User")
         );
@@ -147,14 +148,10 @@ public class PostServiceImpl implements PostService {
         }
         if (validationAuthority(user, post)) {
             postRepository.delete(post);
+            return new StatusAndMessageDTO(200, "게시글 삭제 완료");
         } else {
             throw new IllegalArgumentException();
         }
-
-        return new LinkedHashMap<>() {{
-            put("success", "true");
-            put("status", "200");
-        }};
     }
 
     // 수정, 삭제시 권한 확인

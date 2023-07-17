@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.example.blog.domain.comment.service.CommentService;
 import com.example.blog.domain.post.service.PostService;
+import com.example.blog.global.dto.StatusAndMessageDTO;
 import com.example.blog.global.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,9 +72,9 @@ public class PostController {
     @Operation(summary = "게시글 삭제")
     // 게시글 삭제
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<Map<String,String>> deletePost(@PathVariable("postId") Long postId
-                                                        ,  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Map<String, String> response = postService.deletePost(postId, userDetails.getUsername());
+    public ResponseEntity<StatusAndMessageDTO> deletePost(@PathVariable("postId") Long postId
+                                                        , @AuthenticationPrincipal UserDetailsImpl userDetails){
+        StatusAndMessageDTO response = postService.deletePost(postId, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
