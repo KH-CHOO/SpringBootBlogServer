@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
+    private final CorsConfig corsConfig;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -75,6 +76,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
         );
 
+        http.addFilterBefore(corsConfig.corsFilter(), JwtAuthenticationFilter.class);
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
