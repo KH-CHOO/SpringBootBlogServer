@@ -31,7 +31,7 @@ public class CommentController {
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         CommentResponseDTO response = commentService.createComment(commentRequestDTO, userDetails.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Operation(summary = "댓글 수정")
