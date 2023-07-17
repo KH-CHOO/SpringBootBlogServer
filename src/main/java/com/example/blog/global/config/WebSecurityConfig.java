@@ -54,6 +54,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
+        http.cors((cors) -> cors.disable());
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement((sessionManagement) ->
@@ -65,7 +66,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
                         .requestMatchers("/api/user/**").permitAll()
-                        .requestMatchers(HttpMethod.GET ,"/api/posts/**").permitAll()
+                        .requestMatchers("/api/posts/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
