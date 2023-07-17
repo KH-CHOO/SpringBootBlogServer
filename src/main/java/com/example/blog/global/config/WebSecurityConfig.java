@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
+    private final CorsConfig corsConfig;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -66,7 +67,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
                         .requestMatchers("/api/user/**").permitAll()
-                        .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/posts/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
@@ -75,6 +76,7 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
         );
 
+        http.addFilterBefore(corsConfig.corsFilter(), JwtAuthenticationFilter.class);
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
