@@ -15,13 +15,15 @@ import com.example.blog.domain.user.service.S3Service;
 import com.example.blog.global.dto.StatusAndMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -73,8 +75,16 @@ public class PostServiceImpl implements PostService {
     // 게시글 전체 조회
     @Transactional(readOnly = true)
     @Override
-    public List<PostResponseDTO> getPosts() {
-        List<Post> posts = postRepository.findAllByOrderByCreatedDateDesc();
+    public Page<PostResponseDTO> getPosts(int page) {
+        // 페이징 기능
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, 15, sort);
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        // 페이지 수 이상으로 page 가 들아올 때
+        if (page >= posts.getTotalPages()) {
+            throw new IllegalArgumentException("게시글이 없습니다.");
+        }
 
         posts.forEach(post -> {
             // 게시글 좋아요 수
@@ -85,10 +95,7 @@ public class PostServiceImpl implements PostService {
                     comment.setLikeCount(commentLikeRepository.countByCommentId(comment.getId())));
         });
 
-        List<PostResponseDTO> response = posts.stream()
-                .map(PostResponseDTO::new)
-                .collect(Collectors.toList());
-        return response;
+        return posts.map(PostResponseDTO::new);
     }
 
 
