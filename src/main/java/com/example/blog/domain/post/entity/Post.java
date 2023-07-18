@@ -28,6 +28,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String postImageUrl;
+
     @NotBlank(message = "title input error")
     private String title;
 
@@ -62,13 +65,15 @@ public class Post {
     private List<PostLike> likes = new ArrayList<>();
 
     @Builder
-    private Post(String title, String content, User user) {
+    private Post(String postImageUrl ,String title, String content, User user) {
+        this.postImageUrl = postImageUrl;
         this.title = title;
         this.content = content;
         this.user = user;
     }
 
-    public void modifyPost(String title, String content){
+    public void modifyPost(String postImageUrl,String title, String content){
+        this.postImageUrl = postImageUrl;
         this.title = title;
         this.content = content;
     }

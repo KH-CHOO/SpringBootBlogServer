@@ -11,11 +11,13 @@ import com.example.blog.domain.user.entity.UserRoleEnum;
 import com.example.blog.domain.user.exception.UserNotFoundException;
 import com.example.blog.domain.user.entity.User;
 import com.example.blog.domain.user.repository.UserRepository;
+import com.example.blog.domain.user.service.S3Service;
 import com.example.blog.global.dto.StatusAndMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,6 +33,8 @@ public class PostServiceImpl implements PostService {
     private final PostLikeRepository postLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
 
+    private final S3Service s3Service;
+
     private final MessageSource messageSource;
 
     // 게시글 생성
@@ -40,7 +44,21 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("Not Found User")
         );
+
+        String imgFileUrl = null;
+
+        MultipartFile imageFile = postRequestDTO.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imgFileUrl = s3Service.uploadFile(imageFile);
+            } catch (Exception e) {
+                System.err.println("Failed to upload file to S3: " + e.getMessage());
+                throw e;
+            }
+        }
+
         Post post = Post.builder()
+                .postImageUrl(imgFileUrl)
                 .title(postRequestDTO.getTitle())
                 .content(postRequestDTO.getContent())
                 .user(user)
@@ -100,7 +118,6 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("Not Found User")
         );
-
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new PostNotFoundException("Not Found Post")
         );
@@ -109,10 +126,24 @@ public class PostServiceImpl implements PostService {
             if (!(post.getUser().getId().equals(user.getId()))) {
                 throw new IllegalArgumentException();
             }
+
+        }
+
+        // 기존 이미지 url 불러오기
+        String imgFileUrl = post.getPostImageUrl();
+
+        MultipartFile imageFile = postRequestDTO.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                imgFileUrl = s3Service.uploadFile(imageFile);
+            } catch (Exception e) {
+                System.err.println("Failed to upload file to S3: " + e.getMessage());
+                throw e;
+            }
         }
 
         if (validationAuthority(user, post)) {
-            post.modifyPost(postRequestDTO.getTitle(), postRequestDTO.getContent());
+            post.modifyPost(imgFileUrl, postRequestDTO.getTitle(), postRequestDTO.getContent());
         } else {
             throw new IllegalArgumentException();
         }
