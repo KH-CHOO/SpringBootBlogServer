@@ -14,16 +14,19 @@ import com.example.blog.domain.user.repository.UserRepository;
 import com.example.blog.domain.user.service.S3Service;
 import com.example.blog.global.dto.StatusAndMessageDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
@@ -73,9 +76,15 @@ public class PostServiceImpl implements PostService {
     // 게시글 전체 조회
     @Transactional(readOnly = true)
     @Override
-    public List<PostResponseDTO> getPosts() {
-        List<Post> posts = postRepository.findAllByOrderByCreatedDateDesc();
-
+    public Page<PostResponseDTO> getPosts(int page) {
+        // 페이징 처리 부분
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page, 6, sort);
+        Page<Post> posts = postRepository.findAll(pageable);
+        if (page >= posts.getTotalPages()) {
+            // 예외처리가 완벽하지 않음.
+            throw new IllegalArgumentException("게시글이 없습니다.");
+        }
         posts.forEach(post -> {
             // 게시글 좋아요 수
             post.setLikeCount(postLikeRepository.countByPostId(post.getId()));
@@ -85,10 +94,7 @@ public class PostServiceImpl implements PostService {
                     comment.setLikeCount(commentLikeRepository.countByCommentId(comment.getId())));
         });
 
-        List<PostResponseDTO> response = posts.stream()
-                .map(PostResponseDTO::new)
-                .collect(Collectors.toList());
-        return response;
+        return posts.map(PostResponseDTO::new);
     }
 
 

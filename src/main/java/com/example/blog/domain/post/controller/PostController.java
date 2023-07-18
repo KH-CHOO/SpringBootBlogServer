@@ -10,6 +10,7 @@ import com.example.blog.global.dto.StatusAndMessageDTO;
 import com.example.blog.global.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,8 +48,9 @@ public class PostController {
     @Operation(summary = "게시글 전체 조회")
     // 게시글 전체 조회
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponseDTO>> getPosts() {
-        List<PostResponseDTO> response = postService.getPosts();
+    public ResponseEntity<Page<PostResponseDTO>> getPosts(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+        Page<PostResponseDTO> response = postService.getPosts(page-1);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
