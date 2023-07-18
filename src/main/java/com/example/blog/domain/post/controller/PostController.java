@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = { "Authorization", "Cache-Control", "Content-Type" }, exposedHeaders = "Authorization")
 public class PostController {
 
     private final PostService postService;
@@ -36,7 +37,7 @@ public class PostController {
     public ResponseEntity<PostResponseDTO> createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("imageFile") MultipartFile imageFile,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         PostRequestDTO postRequestDTO = new PostRequestDTO(title, content, imageFile);

@@ -73,7 +73,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/api/file/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
         );
 
         http.addFilterBefore(corsConfig.corsFilter(), JwtAuthenticationFilter.class);
