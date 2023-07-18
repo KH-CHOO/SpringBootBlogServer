@@ -57,11 +57,14 @@ public class JwtUtil {
     // header 에서 JWT 가져오기
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        // URL Decode
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
         return null;
     }
+    // URI Encode = Bearer%20eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYjF5bHEiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTY4OTcyMTQ2OSwiaWF0IjoxNjg5Njg1NDY5fQ.c2Eq6zYltjV9fOZq34tlQn44BLWgYPC5F0SonF_Yt0w
+    // URI Decode = Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYjF5bHEiLCJhdXRoIjoiVVNFUiIsImV4cCI6MTY4OTcyMTQ2OSwiaWF0IjoxNjg5Njg1NDY5fQ.c2Eq6zYltjV9fOZq34tlQn44BLWgYPC5F0SonF_Yt0w
 
     // 토큰 검증
     public boolean validateToken(String token) {

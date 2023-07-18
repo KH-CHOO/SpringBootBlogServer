@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
         String token = jwtUtil.createToken(username, role);
+        // URLEncode
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         Map<String, Object> data = new LinkedHashMap<>();
