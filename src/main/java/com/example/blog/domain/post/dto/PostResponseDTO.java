@@ -14,6 +14,8 @@ public class PostResponseDTO {
 
     private final Long postId;
 
+    private final String postImageUrl;
+
     private final String title;
 
     private final String username;
@@ -28,6 +30,7 @@ public class PostResponseDTO {
 
     public PostResponseDTO(Post post){
         this.postId = post.getId();
+        this.postImageUrl = post.getPostImageUrl();
         this.title = post.getTitle();
         this.username = post.getUser().getUsername();
         this.content = post.getContent();

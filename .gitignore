@@ -42,3 +42,4 @@ out/
 /src/main/resources/application.properties
 /src/main/resources/application.yml
 /feat_imageUpload.patch
+/fix___CORS_by_jun.patch
