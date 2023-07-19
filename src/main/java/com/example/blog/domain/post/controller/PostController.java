@@ -1,26 +1,19 @@
 package com.example.blog.domain.post.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import com.example.blog.domain.comment.service.CommentService;
+import com.example.blog.domain.post.dto.PostRequestDTO;
+import com.example.blog.domain.post.dto.PostResponseDTO;
 import com.example.blog.domain.post.service.PostService;
-import com.example.blog.domain.user.service.S3Service;
 import com.example.blog.global.dto.StatusAndMessageDTO;
 import com.example.blog.global.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.blog.domain.post.dto.PostRequestDTO;
-import com.example.blog.domain.post.dto.PostResponseDTO;
-
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "게시글 기능")
@@ -52,7 +45,7 @@ public class PostController {
     public ResponseEntity<Page<PostResponseDTO>> getPosts(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page
     ) {
-        Page<PostResponseDTO> response = postService.getPosts(page);
+        Page<PostResponseDTO> response = postService.getPosts(page-1);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

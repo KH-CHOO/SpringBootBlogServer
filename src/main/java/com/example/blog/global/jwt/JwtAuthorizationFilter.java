@@ -42,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
-                createErrorResponse(res, HttpServletResponse.SC_BAD_REQUEST, "토큰이 유효하지 않습니다.");
+                createErrorResponse(res, HttpServletResponse.SC_BAD_REQUEST, "AuthorizationFilter: 프론트에서 토큰을 받긴 했는데 인식이 안 됨");
                 return;
             }
 
@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 setAuthentication(info.getSubject());
             } catch (Exception e) {
                 log.error(e.getMessage());
-                createErrorResponse(res, HttpServletResponse.SC_UNAUTHORIZED, "인증 처리 중 에러 발생");
+                createErrorResponse(res, HttpServletResponse.SC_UNAUTHORIZED, "인증 처리 중 서버쪽에서 에러 발생 <- 꼭 알려주세용");
                 return;
             }
         }

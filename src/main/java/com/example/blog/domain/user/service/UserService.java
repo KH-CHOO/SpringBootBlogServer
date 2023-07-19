@@ -5,12 +5,14 @@ import com.example.blog.domain.user.dto.SignupResponseDTO;
 import com.example.blog.domain.user.entity.User;
 import com.example.blog.domain.user.entity.UserRoleEnum;
 import com.example.blog.domain.user.exception.AdminTokenMismatchException;
-import com.example.blog.domain.user.repository.UserRepository;
 import com.example.blog.domain.user.exception.UserDuplicationException;
+import com.example.blog.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
+
 import java.util.Optional;
 
 
@@ -21,10 +23,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    //private final MessageSource messageSource;
+    private final IdenticonService identiconService;
+    private final S3Service s3Service;
+    private final MessageSource messageSource;
 
     // ADMIN_TOKEN
-    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    private final String ADMIN_TOKEN = "AdminToken";
 
     public ResponseEntity<SignupResponseDTO> signup(SignupRequestDTO requestDto) {
         String username = requestDto.getUsername();
@@ -45,8 +49,11 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
+
+
         // 사용자 등록
         User user = User.builder()
+            .userIdenticonUrl(identiconService.makeIdenticonUrl(username))
             .username(username)
             .password(password)
             .role(role)

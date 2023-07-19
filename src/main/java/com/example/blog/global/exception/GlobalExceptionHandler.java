@@ -27,26 +27,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<RestApiException> nullPointerExceptionHandler(NullPointerException ex) {
-        RestApiException restApiException = new RestApiException(HttpStatus.BAD_REQUEST.value(),"토큰이 유효하지 않습니다.");
+        RestApiException restApiException = new RestApiException(HttpStatus.NOT_FOUND.value(),"널포인터예외발생(서버에서 특정 값을 찾을 수 없을 때 발생함)");
         // 여기서는 토큰이 필요한 API 요청에서 토큰을 전달하지 않은 경우만 처리
         // 토큰은 있으나 유효하지 않은 토큰인 경우는 JwtAuthorizationFilter 에서 처리
         return new ResponseEntity<>(
                 // HTTP body
                 restApiException,
                 // HTTP status code
-                HttpStatus.BAD_REQUEST
+                HttpStatus.NOT_FOUND
         );
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<RestApiException> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
-        //토큰이 있고, 유효한 토큰이지만 사용자가 작성한 게시글/댓글이 아닌 경우에는
-        //“작성자만 삭제 또는 수정할 수 있습니다.”라는 에러메시지와 statusCode: 400을 Client에 반환하기
-        RestApiException restApiException = new RestApiException(HttpStatus.BAD_REQUEST.value(),"작성자만 삭제 또는 수정할 수 있습니다.");
+        //토큰이 있고, 유효한 토큰이지만 사용자가 작성한 게시글/댓글이 아닌 경우
+        RestApiException restApiException = new RestApiException(HttpStatus.UNAUTHORIZED.value(),"작성자만 삭제 또는 수정할 수 있습니다.");
         return new ResponseEntity<>(
                 // HTTP body
                 restApiException,
                 // HTTP status code
-                HttpStatus.BAD_REQUEST //400
+                HttpStatus.UNAUTHORIZED
         );
     }
 
