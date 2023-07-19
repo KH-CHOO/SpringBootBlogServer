@@ -58,6 +58,7 @@ public class JwtUtil {
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         // URL Decode
+        // &20 <- 프론트에서 하드코딩 할 때 이거 여부로 인해 서버가 인식 못해서 에러남
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
