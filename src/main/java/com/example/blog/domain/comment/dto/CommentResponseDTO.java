@@ -13,6 +13,7 @@ public class CommentResponseDTO {
     private final String content;
     private final LocalDateTime createDate;
     private final String username;
+    private final String userIdenticonUrl;
 
     private int likeCount;
     public CommentResponseDTO(Comment comment) {
@@ -20,6 +21,7 @@ public class CommentResponseDTO {
         this.content = comment.getContent();
         this.createDate = comment.getCreatedDate();
         this.username = comment.getUser().getUsername();
+        this.userIdenticonUrl = comment.getUser().getUserIdenticonUrl();
         this.likeCount = comment.getLikeCount();
     }
 }

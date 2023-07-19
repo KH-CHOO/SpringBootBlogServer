@@ -20,6 +20,8 @@ public class PostResponseDTO {
 
     private final String username;
 
+    private final String userIdenticonUrl;
+
     private final String content;
 
     private final LocalDateTime createdDate;
@@ -33,6 +35,7 @@ public class PostResponseDTO {
         this.postImageUrl = post.getPostImageUrl();
         this.title = post.getTitle();
         this.username = post.getUser().getUsername();
+        this.userIdenticonUrl = post.getUser().getUserIdenticonUrl();
         this.content = post.getContent();
         this.createdDate = post.getCreatedDate();
         if (!(post.getCommentList() == null)) setCommentList(post.getCommentList());

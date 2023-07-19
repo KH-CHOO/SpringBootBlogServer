@@ -20,6 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String userIdenticonUrl;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -37,7 +40,8 @@ public class User {
     private List<CommentLike> commentLikes;
 
     @Builder
-    private User(String username, String password, UserRoleEnum role) {
+    private User(String userIdenticonUrl, String username, String password, UserRoleEnum role) {
+        this.userIdenticonUrl = userIdenticonUrl;
         this.username = username;
         this.password = password;
         this.role = role;
