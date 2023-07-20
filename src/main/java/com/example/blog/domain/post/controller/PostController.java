@@ -49,6 +49,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @Operation(summary = "게시글 인기순 조회")
     @GetMapping("/posts/trending")
     public ResponseEntity<Page<PostResponseDTO>> getTrendingPosts(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page
