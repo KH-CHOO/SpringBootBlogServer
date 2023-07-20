@@ -13,6 +13,7 @@ import com.example.blog.domain.user.exception.UserNotFoundException;
 import com.example.blog.domain.user.repository.UserRepository;
 import com.example.blog.domain.user.service.S3Service;
 import com.example.blog.global.dto.StatusAndMessageDTO;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
+
+
+    private final EntityManager em;
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -88,10 +92,15 @@ public class PostServiceImpl implements PostService {
             // 게시글 좋아요 수
             post.setLikeCount(postLikeRepository.countByPostId(post.getId()));
 
+
             // 댓글 좋아요 수
             post.getComments().forEach(comment ->
                     comment.setLikeCount(commentLikeRepository.countByCommentId(comment.getId())));
+
+
         });
+
+
 
         return posts.map(PostResponseDTO::new);
     }
@@ -112,11 +121,16 @@ public class PostServiceImpl implements PostService {
         posts.forEach(post -> {
             // 게시글 좋아요 수
             post.setLikeCount(postLikeRepository.countByPostId(post.getId()));
+            postRepository.save(post);
 
             // 댓글 좋아요 수
             post.getComments().forEach(comment ->
                     comment.setLikeCount(commentLikeRepository.countByCommentId(comment.getId())));
+
+            em.flush();
         });
+
+        posts = postRepository.findAll(pageable);
 
         return posts.map(PostResponseDTO::new);
     }
