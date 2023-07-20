@@ -45,7 +45,15 @@ public class PostController {
     public ResponseEntity<Page<PostResponseDTO>> getPosts(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page
     ) {
-        Page<PostResponseDTO> response = postService.getPosts(page-1);
+        Page<PostResponseDTO> response = postService.getPosts(page-1); // 1페이지 조회 시 0부터 시작
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/posts/trending")
+    public ResponseEntity<Page<PostResponseDTO>> getTrendingPosts(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page
+    ) {
+        Page<PostResponseDTO> response = postService.getTrendingPosts(page-1); // 1페이지 조회 시 0부터 시작
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

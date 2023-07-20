@@ -53,11 +53,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @Transient
+    @Column
     private int likeCount;
-    public int getLikeCount() {
-        return likeCount;
-    }
+
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
     }
