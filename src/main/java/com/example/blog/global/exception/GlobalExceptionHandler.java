@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<RestApiException> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         //토큰이 있고, 유효한 토큰이지만 사용자가 작성한 게시글/댓글이 아닌 경우
-        RestApiException restApiException = new RestApiException(HttpStatus.UNAUTHORIZED.value(),"작성자만 삭제 또는 수정할 수 있습니다.");
+        RestApiException restApiException = new RestApiException(HttpStatus.UNAUTHORIZED.value(),"illegalArgument예외발생: 서버에서 값을 인식했으나 유효하지 않은 값으로 판단");
         return new ResponseEntity<>(
                 // HTTP body
                 restApiException,
